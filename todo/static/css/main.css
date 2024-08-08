@@ -1,0 +1,10 @@
+body {
+    background-color: darkslategrey;
+    color: white;
+    font-family: sans-serif;
+    padding: 10px;
+}
+
+a {
+    color: bisque;
+}
