@@ -1,0 +1,28 @@
+{% extends "global.html" %}
+
+{% block head %}
+<title>Index</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="main">
+    <img src="{{ url_for('static', filename='images/blog-home.png')}}">
+    {% if top_posts|length < 1 %}
+    <h4>There are no posts!</h4>
+    <h4>Try making one!</h4>
+    {% else %}
+    <ul>
+        {% for post in top_posts %}
+        <li>
+            <h3>{{ post.title }}</h3>
+            <h5 class="date">{{post.date_created.date()}}</h5>
+            <div>{{ post.body }}</div>
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <a href="/posts/create/" id="create-post">Create a Post!</a>
+</div>
+{% endblock %}
