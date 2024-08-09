@@ -37,18 +37,39 @@ def post_create():
     else:
         return render_template("create-post.html")
 
+@app.route("/posts/<int:id>")
+def view_post(id: int):
+    post = Post.query.get(id)
+    return render_template("post.html", post=post)
+
 @app.route("/admin/")
 def admin():
-    offset = request.args.get("offset")
-    if offset == None or not offset.isdigit():
-        offset = 0
+    page = request.args.get("page")
+    per_page = request.args.get("perpage")
+    if page == None or not page.isdigit():
+        page = 0
     else:
-        offset = int(offset)
-    return render_template("admin.html", posts=Post.query.order_by(Post.date_created).all()[0+offset:10+offset])
+        page = int(page)
+    if per_page == None or not per_page.isdigit():
+        per_page = 10
+    else:
+        per_page = int(per_page)
+    posts = Post.query.order_by(Post.date_created).all()
+    pages = len(posts) // per_page + 1
+    posts = posts[
+        page*per_page:
+        (page*per_page)+per_page
+    ]
+    return render_template("admin.html", posts=posts, page_count=pages, per_page=per_page)
 
-@app.route("/admin/<int:id>")
+@app.route("/admin/delete/<int:id>")
 def admin_post(id: int):
-    return render_template("admin_post.html", post=Post.query.get(id))
+    try:
+        db.session.delete(Post.query.get(id))
+        db.session.commit()
+    except:
+        return "<div><style>color: red</style><h1>An error occurred while deleting the post</h1></div>"
+    return redirect("/admin")
 
 
 if __name__ == "__main__":

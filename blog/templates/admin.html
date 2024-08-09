@@ -1,20 +1,47 @@
 {% extends "global.html" %}
 
 {% block head %}
-<title>Index</title>
+<title>Admin</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
 {% endblock %}
 
 {% block body %}
+<script>
+    var update_perpage = () => {
+        const selectElement = document.getElementById("per-page-input");
+        const selectedValue = selectElement.value;
+        const url = new URL(window.location.href);
+        url.searchParams.set('perpage', selectedValue);
+        window.location.href = url.href;
+    }
+    var update_pagenumber = (number) => {
+        const url = new URL(window.location.href);
+        url.searchParams.set('page', number);
+        window.location.href = url.href;
+    }
+</script>
 <div class="main">
     <img src="{{ url_for('static', filename='images/blog-admin.png')}}">
     <ul>
         {% for post in posts %}
         <li>
-            <a href="posts/{{post.id}}">{{ post.title }}</a>
-            <a href="admin/delete/{{ post.id }}">Delete post</a>
+            <a href="/posts/{{post.id}}">{{ post.title }}</a>
+            <a href="/admin/delete/{{ post.id }}">Delete post</a>
         </li>
         {% endfor %}
     </ul>
+    <label for="per-page">Number of Posts per page</label>
+    <select name="per-page" id="per-page-input" onchange="update_perpage()">
+        <option value="10" {% if per_page == 10 %}selected{% endif %}>10</option>
+        <option value="20" {% if per_page == 20 %}selected{% endif %}>20</option>
+        <option value="50" {% if per_page == 50 %}selected{% endif %}>50</option>
+        <option value="100" {% if per_page == 100 %}selected{% endif %}>100</option>
+    </select>
+    <div>
+        {% for page_number in range(page_count) %}
+        <button onclick="update_pagenumber({{page_number}})">{{page_number+1}}</button>
+        {% endfor %}
+    </div>
+
 </div>
 {% endblock %}

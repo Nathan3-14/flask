@@ -1,7 +1,7 @@
 {% extends "global.html" %}
 
 {% block head %}
-<title>Index</title>
+<title>Home</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
 {% endblock %}
 
@@ -15,9 +15,11 @@
     <ul>
         {% for post in top_posts %}
         <li>
-            <h3>{{ post.title }}</h3>
-            <h5 class="date">{{post.date_created.date()}}</h5>
-            <div>{{ post.body }}</div>
+            <div>
+                <a href="/posts/{{post.id}}"><h3>{{ post.title }}</h3></a>
+                <h5 class="date">{{post.date_created.date()}}</h5>
+                <div>{{ post.body }}</div>
+            </div>
         </li>
         {% endfor %}
     </ul>

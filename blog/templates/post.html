@@ -1,0 +1,22 @@
+{% extends "global.html" %}
+
+{% block head %}
+<title>{{post.title}}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/post.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="main">
+    <h1>{{post.title}}</h1>
+    <h4 class="date">{{post.date_created.date()}}</h4>
+    <div>
+        {{post.body}}
+    </div>
+
+    <br>
+    <div id="create-post">
+        <p>Want to make a post like this?</p>
+        <a href="/posts/create/">Create a Post!</a>
+    </div>
+</div>
+{% endblock %}
