@@ -9,11 +9,13 @@
 <div class="main">
     <img src="{{ url_for('static', filename='images/blog-create.png')}}">
 
-    <div id="form-div">
-        <form action="/posts/create" method="POST">
-            <h3><input type="text" name="title" id="title"></h3>
-            <input type="submit" id="post-button" value="Post!">
-        </form>
-    </div>
+    <form action="/posts/create" method="POST">
+        <label for="title" class="title-input">Title:</label>
+        <input type="text" name="title" class="title-input">
+        <br><br>
+        <label for="title" class="body-input">Body:</label>
+        <textarea cols="50" rows="10" name="body" id="body-input"></textarea>
+        <input type="submit" id="post-button" value="Post!">
+    </form>
 </div>
 {% endblock %}

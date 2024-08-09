@@ -3,3 +3,9 @@ body {
     color: white;
     font-family: sans-serif;
 }
+
+.main {
+    border: 3px white solid;
+    padding: 5px;
+    border-radius: 10px;
+}
