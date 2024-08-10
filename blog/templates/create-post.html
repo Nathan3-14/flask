@@ -10,12 +10,18 @@
     <img src="{{ url_for('static', filename='images/blog-create.png')}}">
 
     <form action="/posts/create" method="POST">
-        <label for="title" class="title-input">Title:</label>
-        <input type="text" name="title" class="title-input">
+        <div class="field {% if 'title' in needed_fields %}needed{% endif %}">
+            <label for="title" class="title-input">Title<b style="color: red">*</b>:</label>
+            <input type="text" name="title" class="title-input">
+        </div>
         <br><br>
-        <label for="title" class="body-input">Body:</label>
-        <textarea cols="50" rows="10" name="body" id="body-input"></textarea>
-        <br><br>
+        <div class="field {% if 'body' in needed_fields %}needed{% endif %} {% if 'body' in needed_fields %}needed2{% endif %}">
+            <label for="body" class="body-input">Body:</label>
+            <textarea cols="50" rows="10" name="body" id="body-input"></textarea>
+        </div>
+        <br>
+        <p>(<b style="color: red">*</b> are required fields)</p>
+        <br>
         <input type="submit" id="post-button" value="Post!">
     </form>
 </div>

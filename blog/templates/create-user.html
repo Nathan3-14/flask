@@ -1,0 +1,28 @@
+{% extends "global.html" %}
+
+{% block head %}
+<title>Create Post</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/create-post.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="main">
+    <img src="{{ url_for('static', filename='images/blog-create.png')}}">
+
+    <form action="/users/create" method="POST">
+        <div class="field {% if 'username' in needed_fields %}needed{% endif %}">
+            <label for="username" class="username-input">Username<b style="color: red">*</b>:</label>
+            <input type="text" name="username" class="username-input">
+        </div>
+        <br><br>
+        <div class="field {% if 'password' in needed_fields %}needed{% endif %} {% if 'password' in needed_fields %}needed2{% endif %}">
+            <label for="password" class="password-input">Password<b style="color: red">*</b>:</label>
+            <input type="password" name="password" class="password-input">
+        </div>
+        <br>
+        <p>(<b style="color: red">*</b> are required fields)</p>
+        <br>
+        <input type="submit" id="post-button" value="Post!">
+    </form>
+</div>
+{% endblock %}

@@ -1,7 +1,6 @@
 .title-input {
     font-size: large;
     font-family: sans-serif;
-    /* width: 50%; */
 }
 .body-input {
     font-size: medium;
@@ -10,6 +9,21 @@
     height: 40vh
 }
 
+.field.needed {
+    animation: flash-red 1s forwards;
+}
+
+@keyframes flash-red {
+    0% {
+        background-color: transparent;
+    }
+    0.5% {
+        background-color: red;
+    }
+    100% {
+        background-color: transparent;
+    }
+}
 
 #post-button {
     color: white;

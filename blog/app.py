@@ -2,10 +2,26 @@ from typing import Any, List
 from flask import Flask, redirect, render_template, request, session
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+try:
+    from s__encr import encr, decr
+except:
+    print("Please download encr file to use")
+    quit()
+
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///posts.db"
 db = SQLAlchemy(app)
+
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    display_name = db.Column(db.String(20), nullable=False)
+    password = db.Column(db.Integer, nullable=False)
+
+    def __repr__(self) -> str:
+        return f"User {self.id} ({self.display_name})"
+
 
 
 class Comment(db.Model):
@@ -30,11 +46,35 @@ def index():
     top_posts = Post.query.order_by(Post.date_created).all()[:5]
     return render_template("home.html", top_posts=top_posts)
 
+@app.route("/users/create/", methods=["POST", "GET"])
+def user_create():
+    if request.method == "POST":
+        try:
+            user_name = request.form["username"]
+            if user_name == "":
+                return render_template("create-user.html", needed_fields=["username"])
+            user_password = request.form["password"]
+            if user_password == "":
+                return render_template("create-user.html", needed_fields=["password"])
+            
+            new_user = User(display_name=user_name, password=encr(user_password)) # #type:ignore
+            db.session.add(new_user)
+            db.session.commit()
+        except:
+            return "<div><style>color: red</style><h1>An error occurred while creating your user</h1></div>"
+        
+        return redirect("/")
+    else:
+        return render_template("create-user.html", needed_fields=[])
+
 @app.route("/posts/create/", methods=["POST", "GET"])
 def post_create():
     if request.method == "POST":
         try:
             post_title = request.form["title"]
+            if post_title == "":
+                return render_template("create-post.html", needed_fields=["title"])
+            
             post_body = request.form["body"]
             new_post = Post(title=post_title, body=post_body) # type:ignore
             db.session.add(new_post)
@@ -43,7 +83,7 @@ def post_create():
             return "<div><style>color: red</style><h1>An error occurred while creating your post</h1></div>"
         return redirect("/")
     else:
-        return render_template("create-post.html")
+        return render_template("create-post.html", needed_fields=[])
 
 @app.route("/posts/<int:id>")
 def view_post(id: int):
@@ -71,7 +111,7 @@ def admin():
     return render_template("admin.html", posts=posts, page_count=pages, per_page=per_page)
 
 @app.route("/admin/delete/<int:id>")
-def admin_post(id: int):
+def admin_delete_post(id: int):
     try:
         db.session.delete(session.get(id))
         db.session.commit()

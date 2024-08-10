@@ -4,6 +4,18 @@ body {
     font-family: sans-serif;
 }
 
+#top {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+}
+
+#user {
+    display: flex;
+    align-items: center;
+    text-align: right;
+}
+
+
 .main {
     border: 3px white solid;
     padding: 5px;
