@@ -1,5 +1,5 @@
 from typing import Any, List
-from flask import Flask, redirect, render_template, request
+from flask import Flask, redirect, render_template, request, session
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
@@ -7,6 +7,14 @@ app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///posts.db"
 db = SQLAlchemy(app)
 
+
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    body = db.Column(db.String(250), nullable=False)
+    date_created = db.Column(db.DateTime, default=datetime.now())
+
+    def __repr__(self) -> str:
+        return f"Comment {self.id}"
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -39,7 +47,7 @@ def post_create():
 
 @app.route("/posts/<int:id>")
 def view_post(id: int):
-    post = Post.query.get(id)
+    post = session.get(id)
     return render_template("post.html", post=post)
 
 @app.route("/admin/")
@@ -65,7 +73,7 @@ def admin():
 @app.route("/admin/delete/<int:id>")
 def admin_post(id: int):
     try:
-        db.session.delete(Post.query.get(id))
+        db.session.delete(session.get(id))
         db.session.commit()
     except:
         return "<div><style>color: red</style><h1>An error occurred while deleting the post</h1></div>"
@@ -78,14 +86,14 @@ if __name__ == "__main__":
 #* Import app to create db *#
 if __name__ == "app":
     def app_context(func):                                                                                            
-        def inner(args: List[Any]):
+        def inner(args: List[Any]=[]):
             with app.app_context():
                 func(*args)
         return inner  
        
     @app_context
     def remove_post(post_id: int):
-        db.session.delete(Post.query.get(post_id))
+        db.session.delete(session.get(post_id))
         db.session.commit()
     
     @app_context
