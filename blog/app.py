@@ -1,12 +1,24 @@
 from typing import Any, List
-from flask import Flask, redirect, render_template, request, session
+from flask import Flask, make_response, redirect, render_template, request, session
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 try:
     from s__encr import encr, decr
-except:
+except ModuleNotFoundError:
     print("Please download encr file to use")
     quit()
+
+
+def set_cookie(cookie_name: str, value: Any, redirect_location: str="/"):
+    response = make_response(redirect(redirect_location))
+    response.set_cookie(cookie_name, value)
+   
+    return response
+
+def get_cookie(cookie_name: str):
+   value = request.cookies.get(cookie_name)
+   return value
+
 
 
 app = Flask(__name__)
@@ -44,7 +56,7 @@ class Post(db.Model):
 @app.route("/")
 def index():
     top_posts = Post.query.order_by(Post.date_created).all()[:5]
-    return render_template("home.html", top_posts=top_posts)
+    return render_template("home.html", top_posts=top_posts, current_user=get_cookie("current_user"))
 
 @app.route("/users/create/", methods=["POST", "GET"])
 def user_create():
@@ -60,10 +72,12 @@ def user_create():
             new_user = User(display_name=user_name, password=encr(user_password)) # #type:ignore
             db.session.add(new_user)
             db.session.commit()
-        except:
+
+            return set_cookie("current_user", new_user.display_name)
+        except Exception as e:
+            print(e)
             return "<div><style>color: red</style><h1>An error occurred while creating your user</h1></div>"
         
-        return redirect("/")
     else:
         return render_template("create-user.html", needed_fields=[])
 
@@ -85,7 +99,7 @@ def post_create():
     else:
         return render_template("create-post.html", needed_fields=[])
 
-@app.route("/posts/<int:id>")
+@app.route("/posts/<int:id>/")
 def view_post(id: int):
     post = session.get(id)
     return render_template("post.html", post=post)
@@ -110,7 +124,7 @@ def admin():
     ]
     return render_template("admin.html", posts=posts, page_count=pages, per_page=per_page)
 
-@app.route("/admin/delete/<int:id>")
+@app.route("/admin/delete/<int:id>/")
 def admin_delete_post(id: int):
     try:
         db.session.delete(session.get(id))
