@@ -2,17 +2,17 @@
 
 {% block head %}
 <title>Create Post</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='css/create-user.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/create-post.css') }}">
 {% endblock %}
 
 {% block body %}
 <div class="main">
-    <img src="{{ url_for('static', filename='images/blog-create.png')}}">
+    <img src="{{ url_for('static', filename='images/blog-login.png')}}">
 
-    <form action="/users/create" method="POST">
-        <div class="field {% if 'username' in needed_fields %}needed{% endif %}">
-            <label for="username" class="username-input">Username<b style="color: red">*</b>:</label>
-            <input type="text" name="username" class="username-input">
+    <form action="/users/login" method="POST">
+        <div class="field {% if 'uuid' in needed_fields %}needed{% endif %}">
+            <label for="uuid" class="uuid-input">UUID<b style="color: red">*</b>:</label>
+            <input type="text" name="uuid" class="uuid-input">
         </div>
         <br><br>
         <div class="field {% if 'password' in needed_fields %}needed{% endif %} {% if 'password' in needed_fields %}needed2{% endif %}">
@@ -21,8 +21,9 @@
         </div>
         <br>
         <p>(<b style="color: red">*</b> are required fields)</p>
+        {% if failed == True %}<h3 style="color: red"></h3>{% endif %}
         <br>
-        <input type="submit" id="create-button" value="Create!">
+        <input type="submit" id="login-button" value="Login!">
     </form>
 </div>
 {% endblock %}

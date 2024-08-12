@@ -9,11 +9,22 @@
 <body>
     <div id="top">
         <a href="/"><img src="{{ url_for('static', filename='images/blog.png')}}"></a>
+        {% if no_user %}
         <div id="user">
-            <!-- <h3>{ {current_user.username} }</h3> -->
+            <a href="/users/create/"><h3>No Account? Create one!</h3></a>
+        </div>
+        {% else %}
+        <!-- <div id="user-l_part">
+            <a href="/users/logout/"></a>
+        </div> -->
+        <div id="user-r_part">
             <h3>{{current_user}}</h3>
             <img src="{{url_for('static', filename='images/blog-user-var1.png')}}">
         </div>
+        {% endif %}
+    </div>
+    <div id="notifications">
+        {{notifications}}
     </div>
     {% block body %}{% endblock %}
 </body>
