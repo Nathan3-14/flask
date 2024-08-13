@@ -25,7 +25,7 @@
     }
 }
 
-#post-button {
+#button {
     color: white;
     width: 50vw;
     transition: width 0.4s, background-color 0.4s;
@@ -33,7 +33,7 @@
     background-color: darkolivegreen;
     border-radius: 10px;
 }
-#post-button:hover {
+#button:hover {
     width: 60vw;
     background-color: olivedrab;
 }

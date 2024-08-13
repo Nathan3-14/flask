@@ -11,13 +11,15 @@
         <a href="/"><img src="{{ url_for('static', filename='images/blog.png')}}"></a>
         {% if no_user %}
         <div id="user">
+            <button id="login-link-button" onclick="window.location='/users/login/'">Login!</button>
             <a href="/users/create/"><h3>No Account? Create one!</h3></a>
         </div>
         {% else %}
         <!-- <div id="user-l_part">
             <a href="/users/logout/"></a>
         </div> -->
-        <div id="user-r_part">
+        <div id="user">
+            <a href="/users/logout/"><h5>Logout</h5></a>
             <h3>{{current_user}}</h3>
             <img src="{{url_for('static', filename='images/blog-user-var1.png')}}">
         </div>

@@ -2,7 +2,7 @@
 
 {% block head %}
 <title>Create Post</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='css/create-post.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/create.css') }}">
 {% endblock %}
 
 {% block body %}
@@ -22,7 +22,7 @@
         <br>
         <p>(<b style="color: red">*</b> are required fields)</p>
         <br>
-        <input type="submit" id="post-button" value="Post!">
+        <input type="submit" id="button" value="Post!">
     </form>
 </div>
 {% endblock %}

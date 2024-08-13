@@ -10,15 +10,24 @@ body {
 }
 
 
-#user-r_part {
+#user {
     display: flex;
-    align-items: center;
-    justify-content: flex-end;
+    justify-content: flex-end; /* Aligns items to the right */
+    align-items: center; /* Vertically aligns items */
+    gap: 15px; /* Adds space between the items */
 }
-#user-l_part {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
+
+#login-link-button {
+    color: white;
+    width: 25vw;
+    transition: width 0.4s, background-color 0.4s;
+    font-size: x-large;
+    background-color: darkolivegreen;
+    border-radius: 10px;
+}
+#login-link-button:hover {
+    width: 30vw;
+    background-color: olivedrab;
 }
 
 

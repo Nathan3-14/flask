@@ -16,9 +16,12 @@ def get_form_property(property: str, template_path: str) -> Tuple[bool, str]: #?
     return (False, value)
 
 
-def set_cookie(cookie_name: str, value: Any, redirect_location: str="/"):
+def set_cookie(cookie_name: str, value: Any, redirect_location: str="/", expires: int|None=None):
     response = make_response(redirect(redirect_location))
-    response.set_cookie(cookie_name, value)
+    if expires == None:
+        response.set_cookie(cookie_name, value)
+    else:
+        response.set_cookie(cookie_name, value, expires=expires)
    
     return response
 
@@ -87,6 +90,10 @@ def index():
     top_posts = Post.query.order_by(Post.date_created).all()[:5]
     return render_template_full([], "home.html", top_posts=top_posts)
 
+@app.route("/users/logout/")
+def user_logout():
+    return set_cookie("current_user", "", expires=0)
+
 @app.route("/users/login/", methods=["POST", "GET"])
 def user_login():
     if request.method == "POST":
@@ -99,6 +106,12 @@ def user_login():
             password = password[1]
 
             current_user = User.query.filter_by(uuid=uuid).first()
+            print(current_user.password)
+            print(decr(current_user.password))
+            print(password)
+            if decr(current_user.password) != password:
+                current_user = None
+
             if current_user == None:
                 return render_template_full([], "login-user.html", needed_fields=["uuid", "password"], failed=True)
             return set_cookie("current_user", current_user.uuid)
@@ -150,12 +163,14 @@ def post_create():
             return "<div><style>color: red</style><h1>An error occurred while creating your post</h1></div>"
         return redirect("/")
     else:
+        if get_current_user() == None:
+            return redirect("/users/create/")
         return render_template_full([], "create-post.html", needed_fields=[])
 
 @app.route("/posts/<int:id>/")
 def view_post(id: int):
-    post = session.get(id)
-    return render_template("post.html", post=post)
+    post = Post.query.get(id)
+    return render_template_full([], "post.html", post=post)
 
 @app.route("/admin/")
 def admin():
