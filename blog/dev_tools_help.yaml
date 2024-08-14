@@ -3,7 +3,7 @@ commands:
     usage: "create_all"
     description: "Creates / Updates the database"
   delete_user:
-    usage: "delete_user <id:int> [delete_all:bool]"
+    usage: "delete_user <id:int> \\[delete_all:bool]"
     description: "Deletes the specified user, all all"
   add_admin:
     usage: "add_admin <username:str> <password:str>"
