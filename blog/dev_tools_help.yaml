@@ -8,3 +8,6 @@ commands:
   add_admin:
     usage: "add_admin <username:str> <password:str>"
     description: "Adds an admin with the specified parameters"
+  quit:
+    usage: "quit"
+    description: "Quits the program"
